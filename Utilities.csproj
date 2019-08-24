@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncQueue.cs" />
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="Pool.cs" />
