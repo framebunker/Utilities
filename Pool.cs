@@ -162,7 +162,7 @@ namespace framebunker
 
 
 	/// <summary>
-	/// Default <see cref="IPool"/> implementation wrapping a fixed-size, lock-free multi-threading-compatible, cyclic buffer
+	/// Default <see cref="IPool"/> implementation wrapping a fixed-size, lock-free multi-threading-compatible buffer
 	/// </summary>
 	public class Pool<T> : IPool where T : class
 	{

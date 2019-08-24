@@ -73,13 +73,13 @@ namespace framebunker
 		/// </summary>
 		public static void FastRemoveAt<V> (this IList<V> source, int index)
 		{
-			int count = source.Count;
-			if (index < count - 1)
+			int last = source.Count - 1;
+			if (index < last)
 			{
-				source[index] = source[count - 1];
+				source[index] = source[last];
 			}
 
-			source.RemoveAt (count - 1);
+			source.RemoveAt (last);
 		}
 
 
@@ -115,14 +115,10 @@ namespace framebunker
 					continue;
 				}
 
-				int last = finalCount - 1;
-
-				if (index < last)
+				if (index < --finalCount)
 				{
-					source[index] = source[last];
+					source[index] = source[finalCount];
 				}
-
-				--finalCount;
 			}
 
 			int diff = source.Count - finalCount;
