@@ -7,7 +7,7 @@
     <ProjectGuid>{666ACA7F-FB21-4A11-B96F-029485FE7362}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Utilities</RootNamespace>
+    <RootNamespace>framebunker</RootNamespace>
     <AssemblyName>Utilities</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
