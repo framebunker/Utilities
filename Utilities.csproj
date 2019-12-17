@@ -41,6 +41,7 @@
     <Compile Include="AsyncQueue.cs" />
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="DisposableExtensions.cs" />
+    <Compile Include="Markup.cs" />
     <Compile Include="Pool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
