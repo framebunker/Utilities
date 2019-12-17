@@ -10,7 +10,7 @@ namespace framebunker
 		/// Dispose a given <see cref="IDisposable"/> if it passes the given <paramref name="test"/>
 		/// </summary>
 		/// <returns>Whether the <see cref="IDisposable"/> was disposed or not</returns>
-		public static bool DisposeIf<T> (this T instance, Func<T, bool> test)
+		public static bool DisposeIf<T> ([NotNull] this T instance, [NotNull] Func<T, bool> test)
 			where T : IDisposable
 		{
 			if (!test (instance))
@@ -27,7 +27,7 @@ namespace framebunker
 		/// Remove from a given list and dispose all <see cref="IDisposable"/> entries passing the given <paramref name="test"/>
 		/// </summary>
 		/// <returns>The number of entries disposed and removed from the list</returns>
-		public static int RemoveAndDisposeAll<T> (this List<T> list, Predicate<T> test)
+		public static int RemoveAndDisposeAll<T> ([NotNull] this List<T> list, [NotNull] Predicate<T> test)
 			where T : IDisposable
 		{
 			return list.RemoveAll (item => item.DisposeIf (i => test (i)));
@@ -38,7 +38,7 @@ namespace framebunker
 		/// Remove from a given unsorted list and dispose all <see cref="IDisposable"/> entries passing the given <paramref name="test"/>, shuffling non-matching entries into their place
 		/// </summary>
 		/// <returns>The number of entries disposed and removed from the list</returns>
-		public static int FastRemoveAndDisposeAll<T> (this List<T> list, Predicate<T> test)
+		public static int FastRemoveAndDisposeAll<T> ([NotNull] this List<T> list, [NotNull] Predicate<T> test)
 			where T : IDisposable
 		{
 			return list.FastRemoveAll (item => item.DisposeIf (i => test (i)));
@@ -49,7 +49,7 @@ namespace framebunker
 		/// Remove and dispose all <see cref="IDisposable"/> entries from a given list
 		/// </summary>
 		/// <returns>The number of entries disposed and removed from the list</returns>
-		public static int RemoveAndDisposeAll<T> (this List<T> list)
+		public static int RemoveAndDisposeAll<T> ([NotNull] this List<T> list)
 			where T : IDisposable
 		{
 			int size = list.Count;
@@ -72,7 +72,7 @@ namespace framebunker
 		/// Dispose all <see cref="IDisposable"/> entries in a list and clear it. Direct mapping to <see cref="RemoveAndDisposeAll&lt;T&gt; (List&lt;T&gt;)"/>.
 		/// </summary>
 		/// <returns>The number of entries disposed and removed from the list</returns>
-		public static int ClearAndDisposeAll<T> (this List<T> list)
+		public static int ClearAndDisposeAll<T> ([NotNull] this List<T> list)
 			where T : IDisposable
 		{
 			return list.RemoveAndDisposeAll ();
@@ -83,7 +83,7 @@ namespace framebunker
 		/// Dispose all <see cref="IDisposable"/> entries in a queue and clear it
 		/// </summary>
 		/// <returns>The number of entries disposed and removed from the queue</returns>
-		public static int DequeueAndDisposeAll<T> (this Queue<T> queue)
+		public static int DequeueAndDisposeAll<T> ([NotNull] this Queue<T> queue)
 			where T : IDisposable
 		{
 			int size = queue.Count;
@@ -108,7 +108,7 @@ namespace framebunker
 		/// Dispose all <see cref="IDisposable"/> entries in a queue and clear it. Direct mapping to <see cref="DequeueAndDisposeAll&lt;T&gt; (Queue&lt;T&gt;)"/>.
 		/// </summary>
 		/// <returns>The number of entries disposed and removed from the queue</returns>
-		public static int ClearAndDisposeAll<T> (this Queue<T> queue)
+		public static int ClearAndDisposeAll<T> ([NotNull] this Queue<T> queue)
 			where T : IDisposable
 		{
 			return queue.DequeueAndDisposeAll ();
@@ -119,7 +119,7 @@ namespace framebunker
 		/// Remove and dispose from <paramref name="start"/> index of a given list all <see cref="IDisposable"/> entries
 		/// </summary>
 		/// <returns>The number of entries disposed and removed from the list</returns>
-		public static int RemoveAndDisposeRange<T> (this List<T> list, int start)
+		public static int RemoveAndDisposeRange<T> ([NotNull] this List<T> list, int start)
 			where T : IDisposable
 		{
 			return list.RemoveAndDisposeRange (start, list.Count - start);
@@ -130,7 +130,7 @@ namespace framebunker
 		/// Remove and dispose from <paramref name="start"/> index of a given list <paramref name="count"/> <see cref="IDisposable"/> entries if available
 		/// </summary>
 		/// <returns><paramref name="count"/> or 0 if <paramref name="start"/> + <paramref name="count" /> is out of range</returns>
-		public static int RemoveAndDisposeRange<T> (this List<T> list, int start, int count)
+		public static int RemoveAndDisposeRange<T> ([NotNull] this List<T> list, int start, int count)
 			where T : IDisposable
 		{
 			int end = start + count;
@@ -155,7 +155,7 @@ namespace framebunker
 		/// Remove and dispose <paramref name="item"/> from a given list
 		/// </summary>
 		/// <returns>Whether <paramref name="item"/> was removed and disposed from the list</returns>
-		public static bool RemoveAndDispose<T> (this List<T> list, T item)
+		public static bool RemoveAndDispose<T> ([NotNull] this List<T> list, T item)
 			where T : IDisposable
 		{
 			bool removed = list.Remove (item);
@@ -169,7 +169,7 @@ namespace framebunker
 		/// Remove and dispose <see cref="item"/> from an unsorted list, shuffling the last list element into the previous position of <paramref name="item"/>
 		/// </summary>
 		/// <returns>Whether <paramref name="item"/> was removed and disposed from the list</returns>
-		public static bool FastRemoveAndDispose<T> (this List<T> list, T item)
+		public static bool FastRemoveAndDispose<T> ([NotNull] this List<T> list, T item)
 			where T : IDisposable
 		{
 			bool removed = list.FastRemove (item);
@@ -183,7 +183,7 @@ namespace framebunker
 		/// Remove and dispose the entry at <paramref name="index"/> from a given list
 		/// </summary>
 		/// <returns>Whether an entry at <paramref name="index"/> was removed and disposed from the list</returns>
-		public static bool RemoveAndDisposeAt<T> (this List<T> list, int index)
+		public static bool RemoveAndDisposeAt<T> ([NotNull] this List<T> list, int index)
 			where T : IDisposable
 		{
 			if (index < 0 || index >= list.Count)

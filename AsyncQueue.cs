@@ -21,7 +21,7 @@ namespace framebunker
 		}
 
 
-		protected T UnsafePop ()
+		[CanBeNull] protected T UnsafePop ()
 		{
 			if (m_LastRead >= m_LastWrite)
 			{
@@ -49,7 +49,7 @@ namespace framebunker
 		/// Dequeue the next item.
 		/// </summary>
 		/// <returns>The next element or null if empty.</returns>
-		public abstract T Dequeue ();
+		[CanBeNull] public abstract T Dequeue ();
 
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace framebunker
 		/// <param name="item">The item to add.</param>
 		/// <returns>true if the item was added</returns>
 		/// <remarks>Enqueuing null values will always succeed, but they can never be dequeued.</remarks>
-		public bool Enqueue (T item)
+		public bool Enqueue ([NotNull] T item)
 		{
 			if (item == null)
 			{
@@ -104,7 +104,7 @@ namespace framebunker
 		/// Dequeue the next item.
 		/// </summary>
 		/// <returns>The next element or null if empty.</returns>
-		public override T Dequeue ()
+		[CanBeNull] public override T Dequeue ()
 		{
 			return UnsafePop ();
 		}
@@ -132,7 +132,7 @@ namespace framebunker
 		/// Dequeue the next item (locks).
 		/// </summary>
 		/// <returns>The next element or null if empty.</returns>
-		public override T Dequeue ()
+		[CanBeNull] public override T Dequeue ()
 		{
 			lock (m_ReadLock)
 			{

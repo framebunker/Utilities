@@ -10,7 +10,7 @@ namespace framebunker
 		/// Remove and return the last element of the list
 		/// </summary>
 		/// <returns>The former last element of the list if available - otherwise default (T)</returns>
-		public static T Pop<T> (this List<T> list)
+		[CanBeNull] public static T Pop<T> ([NotNull] this List<T> list)
 		{
 			if (null == list || list.Count < 1)
 			{
@@ -37,7 +37,7 @@ namespace framebunker
 		/// Insert <paramref name="entry"/> into an already sorted list, maintaining the sort
 		/// </summary>
 		/// <returns>The index of <paramref name="entry"/> in the list</returns>
-		public static int InsertIntoPreSorted<T> (this List<T> list, T entry)
+		public static int InsertIntoPreSorted<T> ([NotNull] this List<T> list, T entry)
 		{
 			int index = list.BinarySearch (entry);
 			if (index < 0)
@@ -55,7 +55,7 @@ namespace framebunker
 		/// Remove <paramref name="value"/> from an unsorted list, shuffling the last list element into the previous position of <paramref name="value"/>
 		/// </summary>
 		/// <returns>Whether <paramref name="value"/> was removed or not</returns>
-		public static bool FastRemove<V> (this IList<V> source, V value)
+		public static bool FastRemove<V> ([NotNull] this IList<V> source, V value)
 		{
 			int idx = source.IndexOf (value);
 			if (idx == -1)
@@ -71,7 +71,7 @@ namespace framebunker
 		/// <summary>
 		/// Remove the entry at <paramref name="index"/> from an unsorted list, shuffling the last list element into the <paramref name="index"/> position
 		/// </summary>
-		public static void FastRemoveAt<V> (this IList<V> source, int index)
+		public static void FastRemoveAt<V> ([NotNull] this IList<V> source, int index)
 		{
 			int last = source.Count - 1;
 			if (index < last)
@@ -87,7 +87,7 @@ namespace framebunker
 		/// Remove entries (optionally starting with index <paramref name="startAt"/>) matching <paramref name="test"/> from an unsorted list, shuffling non-matching entries into their place
 		/// </summary>
 		/// <returns>The number of elements removed</returns>
-		public static int FastRemoveAll<V> (this List<V> source, Predicate<V> test, int startAt = 0)
+		public static int FastRemoveAll<V> ([NotNull] this List<V> source, [NotNull] Predicate<V> test, int startAt = 0)
 		{
 			int finalCount = source.Count;
 

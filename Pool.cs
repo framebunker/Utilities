@@ -11,7 +11,7 @@ namespace framebunker
 	/// </summary>
 	public interface IPool
 	{
-		void Release (object instance);
+		void Release ([CanBeNull] object instance);
 	}
 
 
@@ -26,10 +26,10 @@ namespace framebunker
 		/// <summary>
 		/// The <see cref="IPool"/> responsible for this <see cref="PoolItem"/>
 		/// </summary>
-		public IPool Pool { get; private set; }
+		[NotNull] public IPool Pool { get; private set; }
 
 
-		protected PoolItem (IPool pool)
+		protected PoolItem ([NotNull] IPool pool)
 		{
 			Pool = pool;
 		}
@@ -80,7 +80,7 @@ namespace framebunker
 		/// <summary>
 		/// The wrapped value
 		/// </summary>
-		public T Value { get; protected set; }
+		[NotNull] public T Value { get; protected set; }
 
 
 		public PoolItem (IPool owner) : base (owner)
@@ -91,7 +91,7 @@ namespace framebunker
 		/// Set the wrapped value and return the wrapper instance
 		/// </summary>
 		/// <returns>This wrapper instance</returns>
-		public PoolItem<T> Initialize (T value)
+		public PoolItem<T> Initialize ([NotNull] T value)
 		{
 			Value = value;
 
@@ -115,7 +115,7 @@ namespace framebunker
 	public class PooledIList<TList> : PoolItem<TList>
 		where TList : IList
 	{
-		public PooledIList (IPool owner) : base (owner)
+		public PooledIList ([NotNull] IPool owner) : base (owner)
 		{
 			Value = Activator.CreateInstance<TList> ();
 		}
@@ -136,7 +136,7 @@ namespace framebunker
 	/// </summary>
 	public class PooledList<TItem> : PooledIList<List<TItem>>
 	{
-		public PooledList (IPool owner) : base (owner)
+		public PooledList ([NotNull] IPool owner) : base (owner)
 		{}
 	}
 
@@ -146,7 +146,7 @@ namespace framebunker
 	/// </summary>
 	public class IListPool<T> : Pool<PooledIList<T>> where T : IList
 	{
-		public IListPool (int size, Func<Pool<PooledIList<T>>, PooledIList<T>> itemConstructor) : base (size, itemConstructor)
+		public IListPool (int size, [NotNull] Func<Pool<PooledIList<T>>, PooledIList<T>> itemConstructor) : base (size, itemConstructor)
 		{}
 	}
 
@@ -156,7 +156,7 @@ namespace framebunker
 	/// </summary>
 	public class ListPool<T> : Pool<PooledList<T>> where T : class
 	{
-		public ListPool (int size, Func<Pool<PooledList<T>>, PooledList<T>> itemConstructor) : base (size, itemConstructor)
+		public ListPool (int size, [NotNull] Func<Pool<PooledList<T>>, PooledList<T>> itemConstructor) : base (size, itemConstructor)
 		{}
 	}
 
@@ -167,8 +167,8 @@ namespace framebunker
 	public class Pool<T> : IPool where T : class
 	{
 		private readonly int m_Size;
-		private readonly T[] m_Pool;
-		private readonly Func<Pool<T>, T> m_ItemConstructor;
+		[NotNull] private readonly T[] m_Pool;
+		[NotNull] private readonly Func<Pool<T>, T> m_ItemConstructor;
 
 
 		/// <summary>
@@ -176,7 +176,7 @@ namespace framebunker
 		/// </summary>
 		/// <param name="size">The maximum number of entries in the pool</param>
 		/// <param name="itemConstructor">Constructor for new pool entries</param>
-		public Pool (int size, Func<Pool<T>, T> itemConstructor)
+		public Pool (int size, [NotNull] Func<Pool<T>, T> itemConstructor)
 		{
 			m_Size = size;
 			m_Pool = new T[size];
@@ -191,13 +191,13 @@ namespace framebunker
 
 
 		/// <summary>
-		/// Get the first entry matching the <paramref name="match"/> predicate, optionally starting at a given <paramref name="offset"/>, optionally popping the entry from the pool
+		/// Get the first entry matching the <paramref name="match"/> predicate (null predicate matching anything), optionally starting at a given <paramref name="offset"/>, optionally popping the entry from the pool
 		/// </summary>
-		/// <param name="match">The predicate indicating a valid entry</param>
+		/// <param name="match">The predicate indicating a valid entry (null value meaning anything is valid)</param>
 		/// <param name="pop">Whether the found entry should be popped from the pool</param>
 		/// <param name="offset">The offset in the pool from which the search should start</param>
 		/// <returns>The found entry</returns>
-		public T Find (Predicate<T> match, bool pop = false, int offset = 0)
+		[CanBeNull] public T Find ([CanBeNull] Predicate<T> match, bool pop = false, int offset = 0)
 		{
 			T instance = null;
 			offset %= m_Size;
@@ -224,7 +224,7 @@ namespace framebunker
 		/// <summary>
 		/// Perform an <see cref="Action&lt;T&gt;"/> with each entry in the pool
 		/// </summary>
-		public void Foreach (Action<T> action)
+		public void Foreach ([NotNull] Action<T> action)
 		{
 			for (int index = 0; index < m_Size; ++index)
 			{
@@ -239,10 +239,10 @@ namespace framebunker
 
 
 		/// <summary>
-		/// Insert an entry into the first available spot in the pool
+		/// Insert an entry into the first available spot in the pool (adding null fails)
 		/// </summary>
-		/// <returns>Whether the entry fit in the pool and was added</returns>
-		public bool Add (T instance)
+		/// <returns>Whether the entry was non-null, fit in the pool, and was added</returns>
+		public bool Add ([CanBeNull] T instance)
 		{
 			if (instance == null)
 			{
@@ -264,7 +264,7 @@ namespace framebunker
 		/// <summary>
 		/// Extract the first available entry from the pool or construct a new one
 		/// </summary>
-		public T Retain ()
+		[NotNull] public T Retain ()
 		{
 			T instance = null;
 
@@ -304,10 +304,10 @@ namespace framebunker
 
 
 		/// <summary>
-		/// Release pool item, adding it the pool if it fits
+		/// Release pool item, adding it the pool if it fits (releasing null fails)
 		/// </summary>
 		/// <returns>Whether the released item was added to the pool</returns>
-		public bool Release (T instance)
+		public bool Release ([CanBeNull] T instance)
 		{
 			if (instance == null)
 			{
@@ -331,7 +331,7 @@ namespace framebunker
 		}
 
 
-		void IPool.Release (object instance)
+		void IPool.Release ([CanBeNull] object instance)
 		{
 			Release (instance as T);
 		}
