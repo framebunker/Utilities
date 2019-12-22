@@ -166,9 +166,43 @@ namespace framebunker
 	/// </summary>
 	public class Pool<T> : IPool where T : class
 	{
+		private class RestrainedPool : Pool<T>
+		{
+			// Additional buffer space to combat losing references when mass-releasing in heavily threaded environment - apologies for magic number
+			private const int kAsyncSizeBuffer = 10;
+
+
+			protected override T RetainDefault { get { return null; } }
+
+
+			public RestrainedPool (int size, [NotNull] Func<Pool<T>, T> itemConstructor) : base (size + kAsyncSizeBuffer, itemConstructor)
+			{
+				Allocate (size);
+			}
+		}
+
+
+		/// <summary>
+		/// Constructs a restrained <see cref="Pool&lt;T&gt;"/> - preallocating <see cref="size"/> entries and not auto-creating more on <see cref="Retain"/>
+		/// </summary>
+		/// <param name="size">The maximum number of entries in the pool</param>
+		/// <param name="itemConstructor">Constructor for new pool entries</param>
+		/// <returns></returns>
+		public static Pool<T> Restrained (int size, [NotNull] Func<Pool<T>, T> itemConstructor)
+		{
+			return new RestrainedPool (size, itemConstructor);
+		}
+
+
 		private readonly int m_Size;
 		[NotNull] private readonly T[] m_Pool;
 		[NotNull] private readonly Func<Pool<T>, T> m_ItemConstructor;
+
+
+		/// <summary>
+		/// The fallback value if Retain is unable to locate an existing item in the pool
+		/// </summary>
+		protected virtual T RetainDefault { get { return m_ItemConstructor (this); } }
 
 
 		/// <summary>
@@ -188,6 +222,22 @@ namespace framebunker
 		/// The fixed size of the pool
 		/// </summary>
 		public int Size { get { return m_Size; } }
+
+
+		/// <summary>
+		/// Try to add up to <see cref="count"/> or <see cref="Pool&lt;T&gt;"/> size items
+		/// </summary>
+		/// <returns>The number of items actually added</returns>
+		public int Allocate (int count)
+		{
+			count = count <= m_Size ? count : m_Size;
+
+			int allocated;
+			for (allocated = 0; allocated < count && Add (m_ItemConstructor (this)); ++allocated)
+			{}
+
+			return allocated;
+		}
 
 
 		/// <summary>
@@ -262,9 +312,9 @@ namespace framebunker
 
 
 		/// <summary>
-		/// Extract the first available entry from the pool or construct a new one
+		/// Extract the first available entry from the pool or (unless restrained) a new one
 		/// </summary>
-		[NotNull] public T Retain ()
+		[CanBeNull] public T Retain ()
 		{
 			T instance = null;
 
@@ -288,7 +338,7 @@ namespace framebunker
 			bool reuse = instance != null;
 			if (!reuse)
 			{
-				instance = m_ItemConstructor (this);
+				instance = RetainDefault;
 			}
 
 			// Special treatment of PoolItem - marking as live, issuing callback
