@@ -217,6 +217,7 @@ namespace framebunker
 		private readonly int m_Size;
 		[NotNull] private readonly T[] m_Pool;
 		[NotNull] private readonly Func<Pool<T>, T> m_ItemConstructor;
+		private int m_Stored;
 
 
 		/// <summary>
@@ -235,6 +236,7 @@ namespace framebunker
 			m_Size = size;
 			m_Pool = new T[size];
 			m_ItemConstructor = itemConstructor;
+			m_Stored = 0;
 		}
 
 
@@ -242,6 +244,12 @@ namespace framebunker
 		/// The fixed size of the pool
 		/// </summary>
 		public int Size { get { return m_Size; } }
+
+
+		/// <summary>
+		/// The number of spawned items currently stored in the pool
+		/// </summary>
+		public int Stored { get { return m_Stored; } }
 
 
 		/// <summary>
@@ -278,8 +286,15 @@ namespace framebunker
 
 				if (instance != null && (match == null || match (instance)))
 				{
-					if (!pop || Interlocked.CompareExchange (ref m_Pool[index], null, instance) == instance)
+					if (!pop)
 					{
+						break;
+					}
+
+					if (Interlocked.CompareExchange (ref m_Pool[index], null, instance) == instance)
+					{
+						Interlocked.Decrement (ref m_Stored);
+
 						break;
 					}
 
@@ -323,6 +338,7 @@ namespace framebunker
 			{
 				if (Interlocked.CompareExchange (ref m_Pool[index], instance, null) == null)
 				{
+					Interlocked.Increment (ref m_Stored);
 					return true;
 				}
 			}
@@ -349,6 +365,7 @@ namespace framebunker
 
 				if (Interlocked.CompareExchange (ref m_Pool[index], null, instance) == instance)
 				{
+					Interlocked.Decrement (ref m_Stored);
 					break;
 				}
 
