@@ -168,15 +168,23 @@ namespace framebunker
 	{
 		public IListPool (int size, [NotNull] Func<Pool<PooledIList<T>>, PooledIList<T>> itemConstructor) : base (size, itemConstructor)
 		{}
+
+
+		public IListPool (int size) : base (size, p => new PooledIList<T> (p))
+		{}
 	}
 
 
 	/// <summary>
 	/// <see cref="Pool&lt;T&gt;"/> of <see cref="PooledList&lt;T&gt;"/> entries
 	/// </summary>
-	public class ListPool<T> : Pool<PooledList<T>> where T : class
+	public class ListPool<T> : Pool<PooledList<T>>
 	{
 		public ListPool (int size, [NotNull] Func<Pool<PooledList<T>>, PooledList<T>> itemConstructor) : base (size, itemConstructor)
+		{}
+
+
+		public ListPool (int size) : base (size, p => new PooledList<T> (p))
 		{}
 	}
 
