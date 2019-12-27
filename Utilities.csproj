@@ -42,6 +42,7 @@
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="DisposableExtensions.cs" />
     <Compile Include="Markup.cs" />
+    <Compile Include="Math.cs" />
     <Compile Include="Pool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
