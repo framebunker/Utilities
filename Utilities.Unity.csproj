@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Unity\AssemblyInfo.cs" />
+    <Compile Include="Source\Unity\TypeReference.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Utilities.Core.csproj">

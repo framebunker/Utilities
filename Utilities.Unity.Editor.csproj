@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Unity.Editor\AssemblyInfo.cs" />
+    <Compile Include="Source\Unity.Editor\Helpers.cs" />
+    <Compile Include="Source\Unity.Editor\TypeReferenceDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Utilities.Core.csproj">
