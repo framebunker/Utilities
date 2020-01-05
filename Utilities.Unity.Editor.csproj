@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{666ACA7F-FB21-4A11-B96F-029485FE7362}</ProjectGuid>
+    <ProjectGuid>{8B1FFCC7-3DA5-4BEA-85AC-E80ACB7EFF00}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>framebunker</RootNamespace>
-    <AssemblyName>framebunker.Utilities.Core</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <AssemblyName>Utilities.Unity.Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,15 +36,25 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>UnityInstall\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>UnityInstall\Managed\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Core\AssemblyInfo.cs" />
-    <Compile Include="Source\Core\AsyncQueue.cs" />
-    <Compile Include="Source\Core\CollectionExtensions.cs" />
-    <Compile Include="Source\Core\DisposableExtensions.cs" />
-    <Compile Include="Source\Core\Markup.cs" />
-    <Compile Include="Source\Core\Math.cs" />
-    <Compile Include="Source\Core\Pool.cs" />
+    <Compile Include="Source\Unity.Editor\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Utilities.Core.csproj">
+      <Project>{666aca7f-fb21-4a11-b96f-029485fe7362}</Project>
+      <Name>Utilities.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="Utilities.Unity.csproj">
+      <Project>{5ba31677-8299-4845-85c3-6a9df69ce9a6}</Project>
+      <Name>Utilities.Unity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
