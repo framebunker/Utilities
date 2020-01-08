@@ -1,5 +1,4 @@
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 
@@ -18,33 +17,33 @@ namespace framebunker
 		/// <summary>
 		/// Path to the xbuild/msbuild binary (editor only)
 		/// </summary>
-		[NotNull] public static string BuilderBinaryPath { get; }
+		[NotNull] public static string BuilderBinaryPath { get; internal set; }
 		/// <summary>
 		/// Path to the mono binary (editor only)
 		/// </summary>
-		[NotNull] public static string MonoBinaryPath { get; }
+		[NotNull] public static string MonoBinaryPath { get; internal set; }
 		/// <summary>
 		/// The mono library path (editor only)
 		/// </summary>
-		[NotNull] public static string MonoLibraryPath { get; }
+		[NotNull] public static string MonoLibraryPath { get; internal set; }
 
 		/// <summary>
 		/// The Unity library path (editor only)
 		/// </summary>
-		[NotNull] public static string UnityLibraryPath { get; }
+		[NotNull] public static string UnityLibraryPath { get; internal set; }
 		/// <summary>
 		/// The path to the split Unity libraries (editor only)
 		/// </summary>
-		[NotNull] public static string UnitySplitLibraryPath { get; }
+		[NotNull] public static string UnitySplitLibraryPath { get; internal set; }
 		/// <summary>
 		/// Path to the project folder (editor only)
 		/// </summary>
-		[NotNull] public static string ProjectFolderPath { get; }
+		[NotNull] public static string ProjectFolderPath { get; internal set; }
 
 		/// <summary>
 		/// Path to the temp folder
 		/// </summary>
-		[NotNull] public static string TempPath { get; }
+		[NotNull] public static string TempPath { get; internal set; }
 
 
 		static Platform ()
@@ -74,18 +73,7 @@ namespace framebunker
 				FileProtocolPrefix = "file://";
 			}
 
-			if (Application.isEditor)
-			{
-				BuilderBinaryPath = EditorApplication.applicationContentsPath + "/Mono/bin/xbuild" + (IsWindows ? ".bat" : "");
-				MonoBinaryPath = EditorApplication.applicationContentsPath + "/MonoBleedingEdge/bin/mono" + BinaryExtension;
-				MonoLibraryPath = EditorApplication.applicationContentsPath + "/MonoBleedingEdge/lib/mono/4.5";
-
-				UnityLibraryPath = EditorApplication.applicationContentsPath + "/Managed";
-				UnitySplitLibraryPath = EditorApplication.applicationContentsPath + "/Managed/UnityEngine";
-				ProjectFolderPath = Path.GetDirectoryName (Application.dataPath) ?? "";
-				TempPath = ConvertUnityPath (ProjectFolderPath + "/Temp/");
-			}
-			else
+			if (!Application.isEditor)
 			{
 				BuilderBinaryPath = "";
 				MonoBinaryPath = "";

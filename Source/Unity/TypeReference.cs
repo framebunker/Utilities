@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 
-using UnityEditor;
 using UnityEngine;
 
 
@@ -78,7 +77,7 @@ namespace framebunker
 		}
 
 
-		[SerializeField] protected MonoScript m_Script = null;
+		[SerializeField] protected UnityEngine.Object m_Script = null;
 		[SerializeField, HideInInspector] protected string m_TypeName = null;
 	}
 }
