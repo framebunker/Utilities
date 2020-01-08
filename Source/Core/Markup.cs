@@ -44,4 +44,26 @@ namespace framebunker
 	]
 	public class CanBeNullAttribute : Attribute
 	{}
+
+
+	[
+		AttributeUsage (
+			AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Parameter,
+			AllowMultiple = false,
+			Inherited = false
+		)
+	]
+	public class ItemNotNullAttribute﻿ : Attribute
+	{}
+
+
+	[
+		AttributeUsage (
+			AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Parameter,
+			AllowMultiple = false,
+			Inherited = false
+		)
+	]
+	public class ItemCanBeNullAttribute﻿ : Attribute
+	{}
 }
